@@ -1,0 +1,11 @@
+{
+  "name": "whoosh-uploader",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Unofficial workout uploader for MyWhoosh. Create, upload, and manage cycling workouts from JSON.",
+  "bin": { "whoosh-uploader": "bin/whoosh.js" },
+  "engines": { "node": ">=22" },
+  "scripts": { "test": "node --test", "check": "node bin/whoosh.js validate examples/tempo-steps.json" },
+  "dependencies": { "playwright": "^1.56.0" }
+}

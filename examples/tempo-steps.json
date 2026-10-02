@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "name": "Triathlon - 3x10 min progressive tempo",
+  "ftp_watts": 210,
+  "range_policy": "midpoint",
+  "description": "Three 10-minute stepped efforts with two 3-minute recoveries, then 10 minutes easy. Original coach session, no additional warmup.",
+  "steps": [
+    {"repeat": 2, "steps": [
+      {"seconds": 120, "watts": 165},
+      {"seconds": 120, "watts": 170},
+      {"seconds": 120, "watts": 175},
+      {"seconds": 120, "watts": 180},
+      {"seconds": 120, "watts": 185},
+      {"seconds": 180, "watts": [125, 130]}
+    ]},
+    {"seconds": 120, "watts": 165},
+    {"seconds": 120, "watts": 170},
+    {"seconds": 120, "watts": 175},
+    {"seconds": 120, "watts": 180},
+    {"seconds": 120, "watts": 185},
+    {"seconds": 300, "watts": 125},
+    {"seconds": 300, "watts": [105, 115]}
+  ]
+}

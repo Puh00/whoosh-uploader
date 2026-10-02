@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Mixed intervals 18 min",
+  "ftp_watts": 210,
+  "range_policy": "midpoint",
+  "description": "An 18-minute example with ramps, repeated steady efforts, power ranges, cadence cues, and free ride.",
+  "steps": [
+    {"seconds": 300, "ramp_watts": [100, 150], "text": "Build into the session"},
+    {"repeat": 2, "steps": [
+      {"seconds": 180, "watts": 180, "cadence": 90, "text": "Steady effort"},
+      {"seconds": 60, "watts": [120, 130], "text": "Easy spin"}
+    ]},
+    {"seconds": 120, "free_ride": true, "cadence": 85},
+    {"seconds": 180, "ramp_watts": [150, 100], "text": "Cool down"}
+  ]
+}

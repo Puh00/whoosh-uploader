@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.whoosh/
+*.auth.json
+*.receipt.json
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+playwright-report/
+test-results/
+.DS_Store
+Thumbs.db
