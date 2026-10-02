@@ -1,10 +1,8 @@
 # MyWhoosh Workout Uploader
 
-An unofficial workout uploader for MyWhoosh, not affiliated with MyWhoosh. Repository and npm package name: `whoosh-uploader`. The terminal command is `whoosh-uploader`.
+Unofficial CLI tool for creating, uploading, and managing MyWhoosh cycling workouts from JSON. Also exports ZWO files. Package and command: `whoosh-uploader`.
 
-Create cycling workouts from a JSON file, upload them to MyWhoosh, or export them as ZWO files. The CLI checks your workout before uploading and reads it back afterward to verify that it was saved correctly.
-
-**When your workout slots are full, uploading automatically deletes your oldest custom cycling workout without asking for confirmation.** This includes workouts created outside this tool. It removes at most one workout per run and continues only after confirming that a slot is available.
+**When slots are full, uploading deletes your oldest custom cycling workout without confirmation, including workouts created outside this tool.** At most one is deleted per run, selected by creation date.
 
 ## How it works
 
@@ -18,25 +16,22 @@ flowchart LR
     Verify --> Result["Show the result"]
 ```
 
-Sign in once to save a session. After that, uploads run from the terminal without opening a browser. If your session expires, sign in again.
-
 ## Quick start
 
-You need Node.js 22 or newer and a MyWhoosh account for uploads. Validation, previews, and file exports work offline.
+Requires Node.js 22+ and a MyWhoosh account for uploads. From a checkout:
 
 ```sh
 npm ci
-node bin/whoosh.js validate examples/tempo-steps.json
 node bin/whoosh.js upload examples/tempo-steps.json --dry-run
 node bin/whoosh.js auth login
 node bin/whoosh.js upload examples/tempo-steps.json
 ```
 
-Before uploading an example, set its `ftp_watts` to the FTP you use in MyWhoosh and adjust the workout to suit your session. Examples demonstrate the file format; they are not personalized training recommendations.
+Before uploading, set `ftp_watts` to your current MyWhoosh FTP and adjust the example to your training needs. Examples demonstrate the format, not personalized training advice.
 
-Login uses Microsoft Edge by default on Windows. For Chrome, run `node bin/whoosh.js auth login --channel chrome`. For bundled Chromium, run `npx playwright install chromium` first. See the [setup reference](REFERENCE.md#setup) for Linux browser requirements and other authentication options.
+Sign in once; the session is cached until it expires. Login defaults to Edge on Windows and Chromium on Linux. Use `--channel chrome` for Chrome; install bundled Chromium with `npx playwright install chromium`. See [setup](REFERENCE.md#setup) for Linux requirements and session storage.
 
-On Windows, use `npm.cmd` or `npx.cmd` if PowerShell blocks the corresponding wrapper. All commands can run directly through `node`; a global installation is optional.
+Optionally run `npm link` to use `whoosh-uploader` instead of `node bin/whoosh.js`. On Windows, use the `.cmd` wrappers if PowerShell blocks scripts.
 
 ## What happens during upload
 
@@ -56,52 +51,43 @@ flowchart TD
     Verify --> Result["Report the result and any deletion"]
 ```
 
-"Oldest" means the earliest creation date. Repeating an unchanged workout returns the existing copy without deleting anything. A preview with `--dry-run` never changes your account.
+Unchanged uploads return the verified existing copy without deletion. Name or ID conflicts stop before slot recovery. Blocked deletion or a missing slot refund also stops the upload.
 
-If MyWhoosh blocks deletion because a workout is used in a training plan, or no slot is returned, the CLI stops. It does not keep deleting workouts. Deletion cannot be undone by a failed upload, and each new run can select another oldest workout, so inspect an error before retrying.
+A failed upload cannot undo a deletion. Writes are never automatically retried; inspect errors before rerunning, since another run could delete another workout. Run uploads serially per account.
 
 ## Common commands
-
-Run these from the repository folder, replacing `workout.json` with your input file.
 
 ```sh
 node bin/whoosh.js validate workout.json
 node bin/whoosh.js build workout.json --out dist/workout.zwo
 node bin/whoosh.js upload workout.json
+node bin/whoosh.js upload workout.json --dry-run
 node bin/whoosh.js list
 node bin/whoosh.js delete <workout-id>
 node bin/whoosh.js --help
 node bin/whoosh.js upload --help
-node bin/whoosh.js help auth login
 ```
 
-The explicit `delete` command also runs without confirmation. Successful commands print JSON, including the upload result and any workout removed to make room. Errors include a code and message.
-
-Use `<command> --help` or `help <command>` for options, examples, and results. Help works offline without a token or input file. Upload help includes a minimal workout and the supported step formats, so you can use the installed CLI without this repository.
-
-### Preview before uploading
-
-`--dry-run` validates the input and prints a summary plus the native upload payload. It does not sign in, contact MyWhoosh, check credits or remote duplicates, upload, or delete anything. It reports `dry_run`, which does not prove that the server will accept an upload.
+- `--dry-run` validates and prints the upload payload offline. It never uploads or deletes, and does not check authentication, credits, duplicates, or server acceptance. Validation and exports also work offline.
+- `delete` removes the specified workout without confirmation.
+- Results are JSON on stdout; errors are JSON on stderr. Successful uploads return `uploaded` or `already_exists` with `verified: true`; any removal is reported as `deleted_workout`.
+- `<command> --help` or `help <command>` works offline and includes options, examples, and workout input formats.
 
 ## Limits and compatibility
 
-- Supports time-based cycling workouts, including steady efforts, ramps, repeats, cadence, captions, and free ride. Maximum 30 steps after expanding repeats.
-- Power targets scale with your MyWhoosh FTP. This tool does not change your profile FTP.
-- Uses the website's undocumented API, which may change. It is an independent tool, not an official MyWhoosh integration.
-- Uploads have been verified on Windows and native Linux under WSL. In-game playback and trainer behavior have not been verified.
-- Windows protects saved sessions with DPAPI. Linux stores them in an owner-only plaintext file.
+- Time-based cycling workouts: steady efforts, ramps, repeats, cadence, captions, and free ride. Maximum 30 expanded steps.
+- Power scales with your MyWhoosh FTP; the tool does not change your profile FTP.
+- Uses an undocumented API that may change. Uploads are verified on Windows and Linux under WSL, but not in-game playback or trainer behavior.
+- Sessions use DPAPI on Windows and owner-only plaintext files on Linux.
 
 ## Development
 
 ```sh
-npm ci
 npm test
 npm run check
 ```
 
-Tests use synthetic credentials and mocked API responses. They do not upload or delete real workouts. GitHub Actions runs the same checks on Windows and Linux with Node.js 22 and 24.
-
-The command interface is in `bin/`, application code in `src/`, and automated checks in `test/`. The [reference](REFERENCE.md#code-layout) describes the individual modules.
+Tests use synthetic credentials and mocked HTTP, never your live account. CI runs on Windows and Linux with Node.js 22 and 24.
 
 ## Documentation
 
