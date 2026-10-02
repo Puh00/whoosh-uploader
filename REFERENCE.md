@@ -4,7 +4,15 @@ See the [README](README.md) for a high-level overview and workflow diagrams.
 
 ## Setup
 
-Requires Node.js 22 or newer. From the repository folder:
+Requires Node.js 22 or newer. Install from npm:
+
+```sh
+npm install -g whoosh-uploader
+whoosh-uploader --help
+whoosh-uploader auth login
+```
+
+Alternatively, run `npx whoosh-uploader <command>` without a global installation. From a repository checkout:
 
 ```sh
 npm ci

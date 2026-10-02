@@ -1,11 +1,17 @@
 {
   "name": "whoosh-uploader",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Unofficial CLI tool for creating, uploading, and managing MyWhoosh cycling workouts from JSON.",
+  "repository": { "type": "git", "url": "git+https://github.com/Puh00/whoosh-uploader.git" },
+  "homepage": "https://github.com/Puh00/whoosh-uploader#readme",
+  "bugs": { "url": "https://github.com/Puh00/whoosh-uploader/issues" },
+  "keywords": ["mywhoosh", "cycling", "workout", "cli", "zwo"],
+  "files": ["bin/whoosh.js", "src/*.js", "workout.schema.json", "examples/*.json", "REFERENCE.md"],
+  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
   "bin": { "whoosh-uploader": "bin/whoosh.js" },
   "engines": { "node": ">=22" },
-  "scripts": { "test": "node --test", "check": "node bin/whoosh.js validate examples/tempo-steps.json" },
+  "scripts": { "test": "node --test", "check": "node bin/whoosh.js validate examples/tempo-steps.json", "prepublishOnly": "npm test && npm run check" },
   "dependencies": { "playwright": "^1.56.0" }
 }

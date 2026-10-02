@@ -18,20 +18,21 @@ flowchart LR
 
 ## Quick start
 
-Requires Node.js 22+ and a MyWhoosh account for uploads. From a checkout:
+Requires Node.js 22+ and a MyWhoosh account for uploads.
 
 ```sh
-npm ci
-node bin/whoosh.js upload examples/tempo-steps.json --dry-run
-node bin/whoosh.js auth login
-node bin/whoosh.js upload examples/tempo-steps.json
+npm install -g whoosh-uploader
+whoosh-uploader upload --help
+whoosh-uploader upload workout.json --dry-run
+whoosh-uploader auth login
+whoosh-uploader upload workout.json
 ```
 
-Before uploading, set `ftp_watts` to your current MyWhoosh FTP and adjust the example to your training needs. Examples demonstrate the format, not personalized training advice.
+Create `workout.json` using the schema or the example in `upload --help`. Set `ftp_watts` to your current MyWhoosh FTP and adjust the workout to your training needs. Examples demonstrate the format, not personalized training advice.
 
 Run `auth login` to sign in and save your token locally for later uploads. Login defaults to Edge on Windows and Chromium on Linux. Use `--channel chrome` for Chrome; install bundled Chromium with `npx playwright install chromium`. See [setup](REFERENCE.md#setup) for Linux requirements and session storage.
 
-Optionally run `npm link` to use `whoosh-uploader` instead of `node bin/whoosh.js`. On Windows, use the `.cmd` wrappers if PowerShell blocks scripts.
+Without a global install, use `npx whoosh-uploader <command>`. On Windows, use the `.cmd` wrappers if PowerShell blocks scripts.
 
 ## What happens during upload
 
@@ -67,14 +68,14 @@ A failed upload cannot undo a deletion. Writes are never automatically retried; 
 ## Common commands
 
 ```sh
-node bin/whoosh.js validate workout.json
-node bin/whoosh.js build workout.json --out dist/workout.zwo
-node bin/whoosh.js upload workout.json
-node bin/whoosh.js upload workout.json --dry-run
-node bin/whoosh.js list
-node bin/whoosh.js delete <workout-id>
-node bin/whoosh.js --help
-node bin/whoosh.js upload --help
+whoosh-uploader validate workout.json
+whoosh-uploader build workout.json --out dist/workout.zwo
+whoosh-uploader upload workout.json
+whoosh-uploader upload workout.json --dry-run
+whoosh-uploader list
+whoosh-uploader delete <workout-id>
+whoosh-uploader --help
+whoosh-uploader upload --help
 ```
 
 - `--dry-run` validates and prints the upload payload offline. It never uploads or deletes, and does not check authentication, credits, duplicates, or server acceptance. Validation and exports also work offline.
@@ -92,11 +93,12 @@ node bin/whoosh.js upload --help
 ## Development
 
 ```sh
+npm ci
 npm test
 npm run check
 ```
 
-Tests use synthetic credentials and mocked HTTP, never your live account. CI runs on Windows and Linux with Node.js 22 and 24.
+From a checkout, run `node bin/whoosh.js` or use `npm link` to install the local command. Tests use synthetic credentials and mocked HTTP, never your live account. CI runs on Windows and Linux with Node.js 22 and 24.
 
 ## Documentation
 
