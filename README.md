@@ -1,5 +1,7 @@
 # MyWhoosh Workout Uploader
 
+[![npm version](https://img.shields.io/npm/v/whoosh-uploader)](https://www.npmjs.com/package/whoosh-uploader)
+
 Unofficial CLI tool for uploading and managing MyWhoosh cycling workouts. Uploads use JSON files that follow the [workout schema](workout.schema.json); see [examples](examples/) for starting points. Also exports ZWO files. Package and command: `whoosh-uploader`.
 
 **When slots are full, uploading deletes your oldest custom cycling workout without confirmation, including workouts created outside this tool.** At most one is deleted per run, selected by creation date.
