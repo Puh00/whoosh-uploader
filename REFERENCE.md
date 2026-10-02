@@ -23,11 +23,13 @@ Optionally run `npm link` to make the `whoosh-uploader` command available. On Wi
 
 ### Browser login
 
-Login defaults to an installed Microsoft Edge on Windows and bundled Chromium elsewhere. Select Chrome with `--channel chrome` or Edge with `--channel msedge`. To use bundled Chromium:
+Login defaults to Chromium on all platforms. The `@playwright/browser-chromium` dependency downloads the matching browser during npm installation when install scripts are allowed. Select an installed Chrome with `--channel chrome` or Edge with `--channel msedge`.
+
+If npm blocks install scripts, browser downloads are disabled, or the download fails, install the matching Chromium version manually:
 
 ```sh
-npx playwright install chromium
-node bin/whoosh.js auth login --channel chromium
+npx playwright@1.63.0 install chromium
+whoosh-uploader auth login
 ```
 
 Linux also needs the browser's system libraries and a graphical session for interactive login. See [Playwright's browser setup](https://playwright.dev/docs/browsers). Uploads do not need a browser once a valid token is available.

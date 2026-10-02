@@ -162,9 +162,10 @@ Open a temporary browser for MyWhoosh sign-in. Complete login and any CAPTCHA
 within five minutes. Saves the session token, not your password. This browser
 does not share the login or saved passwords from your usual browser.
 
---channel selects Edge, Chrome, or bundled Chromium. The default is Edge on
-Windows and Chromium elsewhere. Install bundled Chromium with:
-  npx playwright install chromium
+--channel selects Edge, Chrome, or bundled Chromium. The default is Chromium
+on all platforms. npm downloads Chromium when install scripts are allowed.
+If the download was skipped or failed, install it with:
+  npx playwright@1.63.0 install chromium
 Linux also needs browser system libraries and a graphical session.
 
 Example: whoosh-uploader auth login --channel chrome

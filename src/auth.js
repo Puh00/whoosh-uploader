@@ -43,9 +43,9 @@ export async function clearToken() {try {await unlink(authPath());} catch(e) {if
 export async function login(channel) {
   const { chromium } = await import('playwright');
   let browser;
-  const selected=channel ?? (process.platform==='win32'?'msedge':'chromium');
+  const selected=channel ?? 'chromium';
   try {browser=await chromium.launch({headless:false,...(selected==='chromium'?{}:{channel:selected})});}
-  catch {throw new WhooshError('BROWSER_UNAVAILABLE','Install Edge or Chrome and pass --channel chrome, or run npx playwright install chromium.');}
+  catch {throw new WhooshError('BROWSER_UNAVAILABLE','Run npx playwright@1.63.0 install chromium, or select an installed browser with --channel chrome or --channel msedge.');}
   try {
     const page=await browser.newPage();
     await page.goto('https://workout.mywhoosh.com/auth');

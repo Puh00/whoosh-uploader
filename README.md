@@ -32,7 +32,7 @@ whoosh-uploader upload workout.json
 
 Create `workout.json` using the schema or the example in `upload --help`. Set `ftp_watts` to your current MyWhoosh FTP and adjust the workout to your training needs. Examples demonstrate the format, not personalized training advice.
 
-Run `auth login` to sign in and save your token locally for later uploads. Login defaults to Edge on Windows and Chromium on Linux. Use `--channel chrome` for Chrome; install bundled Chromium with `npx playwright install chromium`. See [setup](REFERENCE.md#setup) for Linux requirements and session storage.
+Run `auth login` to sign in and save your token locally for later uploads. Login defaults to Chromium on Windows and Linux. The npm dependency downloads Chromium during installation when install scripts are allowed. Use `--channel chrome` or `--channel msedge` to use an installed Chrome or Edge instead. See [setup](REFERENCE.md#setup) for download troubleshooting, Linux requirements, and session storage.
 
 Without a global install, use `npx whoosh-uploader <command>`. On Windows, use the `.cmd` wrappers if PowerShell blocks scripts.
 
