@@ -1,6 +1,6 @@
 # MyWhoosh Workout Uploader
 
-Unofficial CLI tool for creating, uploading, and managing MyWhoosh cycling workouts from JSON. Also exports ZWO files. Package and command: `whoosh-uploader`.
+Unofficial CLI tool for uploading and managing MyWhoosh cycling workouts. Uploads use JSON files that follow the [workout schema](workout.schema.json); see [examples](examples/) for starting points. Also exports ZWO files. Package and command: `whoosh-uploader`.
 
 **When slots are full, uploading deletes your oldest custom cycling workout without confirmation, including workouts created outside this tool.** At most one is deleted per run, selected by creation date.
 
@@ -8,7 +8,7 @@ Unofficial CLI tool for creating, uploading, and managing MyWhoosh cycling worko
 
 ```mermaid
 flowchart LR
-    File["Your workout file"] --> Check["Check the workout"]
+    File["Workout JSON following the schema"] --> Check["Validate the workout"]
     Check --> Preview["Preview without saving"]
     Check --> Export["Export a ZWO file"]
     Check --> Upload["Save to MyWhoosh"]
@@ -29,7 +29,7 @@ node bin/whoosh.js upload examples/tempo-steps.json
 
 Before uploading, set `ftp_watts` to your current MyWhoosh FTP and adjust the example to your training needs. Examples demonstrate the format, not personalized training advice.
 
-Sign in once; the session is cached until it expires. Login defaults to Edge on Windows and Chromium on Linux. Use `--channel chrome` for Chrome; install bundled Chromium with `npx playwright install chromium`. See [setup](REFERENCE.md#setup) for Linux requirements and session storage.
+Run `auth login` to sign in and save your token locally for later uploads. Login defaults to Edge on Windows and Chromium on Linux. Use `--channel chrome` for Chrome; install bundled Chromium with `npx playwright install chromium`. See [setup](REFERENCE.md#setup) for Linux requirements and session storage.
 
 Optionally run `npm link` to use `whoosh-uploader` instead of `node bin/whoosh.js`. On Windows, use the `.cmd` wrappers if PowerShell blocks scripts.
 
@@ -37,7 +37,14 @@ Optionally run `npm link` to use `whoosh-uploader` instead of `node bin/whoosh.j
 
 ```mermaid
 flowchart TD
-    Start["Upload a checked workout"] --> Duplicate{"Already saved?"}
+    Start["Upload a checked workout"] --> Token["Load saved token or MYWHOOSH_TOKEN"]
+    Token --> Ready{"Usable token available?"}
+    Ready -->|No| AuthStop["Stop: sign-in required"]
+    AuthStop -.-> Login["Run auth login and sign in"]
+    Login --> Cache["Save token locally"]
+    Cache --> Retry["Rerun upload"]
+    Retry --> Start
+    Ready -->|Yes| Duplicate{"Already saved?"}
     Duplicate -->|Yes| Existing["Verify and return the existing workout"]
     Duplicate -->|No| Conflict{"Name or ID already taken?"}
     Conflict -->|Yes| Rename["Stop and choose a new name"]
@@ -50,6 +57,8 @@ flowchart TD
     Save --> Verify["Read back and verify the workout"]
     Verify --> Result["Report the result and any deletion"]
 ```
+
+Missing, invalid, or expired tokens stop the upload; login is a separate command, not automatic. `MYWHOOSH_TOKEN` overrides the saved token. If MyWhoosh rejects a token, the CLI stops and asks you to sign in again or check account access.
 
 Unchanged uploads return the verified existing copy without deletion. Name or ID conflicts stop before slot recovery. Blocked deletion or a missing slot refund also stops the upload.
 
