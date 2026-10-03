@@ -1,6 +1,6 @@
 {
   "name": "whoosh-uploader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "type": "module",
   "description": "Unofficial CLI tool for creating, uploading, and managing MyWhoosh cycling workouts from JSON.",

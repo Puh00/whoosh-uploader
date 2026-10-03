@@ -198,9 +198,22 @@ Success has status: "local_session_removed".
 `
 };
 
+/**
+ * Return offline help for the requested command path.
+ * @param {string[]} topics - Command and optional subcommand; empty for overview.
+ * @returns {string} Human-readable CLI help.
+ * @throws {WhooshError} USAGE for an unknown topic.
+ */
 export function helpFor(topics = []) {
-  if (!topics.length) return overview;
+  if (!topics.length) {
+    return overview;
+  }
   const topic = topics.join(' ');
-  if (!Object.hasOwn(commandHelp, topic)) throw new WhooshError('USAGE', 'Unknown help topic. Run whoosh-uploader --help for available commands.');
+  if (!Object.hasOwn(commandHelp, topic)) {
+    throw new WhooshError(
+      'USAGE',
+      'Unknown help topic. Run whoosh-uploader --help for available commands.'
+    );
+  }
   return commandHelp[topic];
 }
